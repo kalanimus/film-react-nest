@@ -25,10 +25,7 @@ services:
       - app-network
 
   backend:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
-    image: ghcr.io/your-username/film-backend:latest
+    image: ghcr.io/${{ github.repository }}-backend:latest
     environment:
       DATABASE_DRIVER: postgresql
       DATABASE_URL: postgresql://student:student@postgres:5432/prac_film
@@ -41,18 +38,12 @@ services:
       - app-network
 
   frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    image: ghcr.io/your-username/film-frontend:latest
+    image: ghcr.io/${{ github.repository }}-frontend:latest
     volumes:
       - frontend_dist:/usr/share/nginx/html
 
   nginx:
-    build:
-      context: ./nginx
-      dockerfile: Dockerfile
-    image: ghcr.io/your-username/film-nginx:latest
+    image: ghcr.io/${{ github.repository }}-nginx:latest
     ports:
       - "80:80"
     volumes:
