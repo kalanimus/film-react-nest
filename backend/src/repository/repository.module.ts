@@ -1,28 +1,27 @@
 import { Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { MongooseModule } from '@nestjs/mongoose';
-import { Film, FilmSchema } from '../films/schemas/film.schema';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { Film } from '../films/entities/film.entity';
+import { Schedule } from '../films/entities/schedule.entity';
 import { FilmsMemoryRepository } from './films-memory.repository';
-import { FilmsMongoRepository } from './films-mongo.repository';
+import { FilmsTypeOrmRepository } from './films-typeorm.repository';
 
 @Module({
-  imports: [
-    MongooseModule.forFeature([{ name: Film.name, schema: FilmSchema }]),
-  ],
+  imports: [TypeOrmModule.forFeature([Film, Schedule])],
   providers: [
     FilmsMemoryRepository,
-    FilmsMongoRepository,
+    FilmsTypeOrmRepository,
     {
       provide: 'IFilmsRepository',
       useFactory: (
         configService: ConfigService,
         memoryRepo: FilmsMemoryRepository,
-        mongoRepo: FilmsMongoRepository,
+        typeormRepo: FilmsTypeOrmRepository,
       ) => {
         const driver = configService.get<string>('DATABASE_DRIVER');
-        return driver === 'mongodb' ? mongoRepo : memoryRepo;
+        return driver === 'postgresql' ? typeormRepo : memoryRepo;
       },
-      inject: [ConfigService, FilmsMemoryRepository, FilmsMongoRepository],
+      inject: [ConfigService, FilmsMemoryRepository, FilmsTypeOrmRepository],
     },
   ],
   exports: ['IFilmsRepository'],
