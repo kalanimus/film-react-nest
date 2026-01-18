@@ -1,4 +1,9 @@
 # FILM!
+## Ссылка на приложение
+
+**Приложение доступно по адресу:** http://kalanimus.film.nomorepartiessbs.ru
+
+**API:** http://api.kalanimus.film.nomorepartiessbs.ru
 
 ## Установка
 
