@@ -63,7 +63,7 @@ jobs:
           VITE_CDN_URL=http://kalanimus.film.nomorepartiessbs.ru/content/afisha
         tags: |
          ${{ steps.meta-frontend.outputs.tags }}
-          ghcr.io/${{ github.repository }}-frontend:latest
+         ghcr.io/${{ github.repository }}-frontend:latest
         labels: ${{ steps.meta-frontend.outputs.labels }}
 
     - name: Extract metadata for nginx
