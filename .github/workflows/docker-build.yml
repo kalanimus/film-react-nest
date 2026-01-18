@@ -58,6 +58,9 @@ jobs:
       with:
         context: ./frontend
         push: true
+        build-args: |
+          VITE_API_URL=http://api.kalanimus.film.nomorepartiessbs.ru/afisha
+          VITE_CDN_URL=http://kalanimus.film.nomorepartiessbs.ru/content/afisha
         tags: |
          ${{ steps.meta-frontend.outputs.tags }}
           ghcr.io/${{ github.repository }}-frontend:latest
