@@ -4,6 +4,7 @@ WORKDIR /app
 COPY package*.json ./
 RUN rm -rf node_modules package-lock.json
 RUN npm install
+RUN npm install --save-dev @types/node
 COPY . .
 
 RUN rm -f .env*
