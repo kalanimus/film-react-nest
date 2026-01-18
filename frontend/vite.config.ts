@@ -1,3 +1,4 @@
+/// <reference types="node" />
 import { defineConfig, loadEnv } from 'vite'
 import react from '@vitejs/plugin-react'
 
@@ -14,8 +15,8 @@ export default defineConfig(({ mode }) => {
       }
     },
     define: {
-      'import.meta.env.VITE_API_URL': JSON.stringify(env.VITE_API_URL),
-      'import.meta.env.VITE_CDN_URL': JSON.stringify(env.VITE_CDN_URL),
+      'import.meta.env.VITE_API_URL': JSON.stringify(env.VITE_API_URL || '/api/afisha'),
+      'import.meta.env.VITE_CDN_URL': JSON.stringify(env.VITE_CDN_URL || '/content/afisha'),
     }
   }
 })
