@@ -9,17 +9,11 @@ COPY . .
 RUN rm -f .env*
 ARG VITE_API_URL
 ARG VITE_CDN_URL
-RUN echo "VITE_API_URL=$VITE_API_URL" > .env
-RUN echo "VITE_CDN_URL=$VITE_CDN_URL" >> .env
-RUN echo "=== Created .env file ==="
-RUN cat .env
-RUN echo "=== Environment variables ==="
-RUN env | grep VITE || echo "No VITE vars"
+ENV VITE_API_URL=$VITE_API_URL
+ENV VITE_CDN_URL=$VITE_CDN_URL
 
 RUN npm run build
 
-RUN echo "=== Checking built files ==="
-RUN grep -o "http[^\"']*" dist/assets/*.js | head -5 || echo "No HTTP URLs found"
 
 
 FROM nginx:alpine
