@@ -1,44 +1,41 @@
 services:
   postgres:
     image: postgres:15
-    environment:
-      POSTGRES_DB: prac_film
-      POSTGRES_USER: student
-      POSTGRES_PASSWORD: student
+    env_file:
+      - .env
     volumes:
       - postgres_data:/var/lib/postgresql/data
     networks:
       - app-network
+    restart: unless-stopped
 
   pgadmin:
     image: dpage/pgadmin4
-    environment:
-      PGADMIN_DEFAULT_EMAIL: admin@admin.com
-      PGADMIN_DEFAULT_PASSWORD: admin
+    env_file:
+      - .env
     ports:
       - "8080:80"
     volumes:
       - pgadmin_data:/var/lib/pgadmin
     networks:
       - app-network
+    restart: unless-stopped
 
   backend:
     image: ghcr.io/kalanimus/film-react-nest-backend:latest
-    environment:
-      DATABASE_DRIVER: postgresql
-      DATABASE_URL: postgresql://student:student@postgres:5432/prac_film
-      DATABASE_USERNAME: student
-      DATABASE_PASSWORD: student
-      LOGGER_TYPE: json
+    env_file:
+      - .env
     depends_on:
       - postgres
     networks:
       - app-network
+    restart: unless-stopped
 
   frontend:
     image: ghcr.io/kalanimus/film-react-nest-frontend:latest
     volumes:
       - frontend_dist:/usr/share/nginx/html
+    restart: unless-stopped
 
   nginx:
     image: ghcr.io/kalanimus/film-react-nest-nginx:latest
@@ -51,6 +48,7 @@ services:
       - frontend
     networks:
       - app-network
+    restart: unless-stopped
 
 volumes:
   postgres_data:

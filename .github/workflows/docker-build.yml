@@ -59,8 +59,8 @@ jobs:
         context: ./frontend
         push: true
         build-args: |
-          VITE_API_URL=http://api.kalanimus.film.nomorepartiessbs.ru/afisha
-          VITE_CDN_URL=http://api.kalanimus.film.nomorepartiessbs.ru/content/afisha
+          VITE_API_URL=${{ secrets.VITE_API_URL }}
+          VITE_CDN_URL=${{ secrets.VITE_CDN_URL }}
         tags: |
           ${{ steps.meta-frontend.outputs.tags }}
           ghcr.io/${{ github.repository }}-frontend:latest
@@ -81,12 +81,25 @@ jobs:
           ${{ steps.meta-nginx.outputs.tags }}
           ghcr.io/${{ github.repository }}-nginx:latest
         labels: ${{ steps.meta-nginx.outputs.labels }}
+
   deploy:
     needs: build-and-push
     runs-on: ubuntu-latest
     if: (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/review-3') && github.event_name == 'push'
     
     steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Copy .env.example to server
+      uses: appleboy/scp-action@v0.1.7
+      with:
+        host: ${{ secrets.SERVER_HOST }}
+        username: ${{ secrets.SERVER_USER }}
+        key: ${{ secrets.SERVER_SSH_KEY }}
+        source: ".env.example"
+        target: "~/film-react-nest/"
+        
     - name: Deploy to server
       uses: appleboy/ssh-action@v1.0.3
       with:
@@ -95,6 +108,12 @@ jobs:
         key: ${{ secrets.SERVER_SSH_KEY }}
         script: |
           cd ~/film-react-nest
+          
+          if [ ! -f .env ]; then
+            cp .env.example .env
+            echo "Created .env from .env.example"
+          fi
+          
           echo ${{ secrets.GITHUB_TOKEN }} | sudo docker login ghcr.io -u ${{ github.actor }} --password-stdin
           sudo docker compose down
           sudo docker volume rm film-react-nest_frontend_dist || true
