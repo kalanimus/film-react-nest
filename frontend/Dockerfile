@@ -6,14 +6,14 @@ RUN rm -rf node_modules package-lock.json
 RUN npm install
 COPY . .
 
-RUN rm -f .env*
-ARG VITE_API_URL
-ARG VITE_CDN_URL
-RUN echo "VITE_API_URL=${VITE_API_URL}" > .env.production
-RUN echo "VITE_CDN_URL=${VITE_CDN_URL}" >> .env.production
+# RUN rm -f .env*
+# ARG VITE_API_URL
+# ARG VITE_CDN_URL
+# RUN echo "VITE_API_URL=${VITE_API_URL}" > .env.production
+# RUN echo "VITE_CDN_URL=${VITE_CDN_URL}" >> .env.production
 
-# RUN npm run build
-RUN npx vite build
+RUN npm run build
+# RUN npx vite build
 
 
 FROM nginx:alpine
