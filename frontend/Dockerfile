@@ -6,6 +6,7 @@ RUN rm -rf node_modules package-lock.json
 RUN npm install
 COPY . .
 
+RUN rm -f .env*
 ARG VITE_API_URL
 ARG VITE_CDN_URL
 RUN echo "VITE_API_URL=$VITE_API_URL" > .env
