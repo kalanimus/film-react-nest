@@ -39,10 +39,6 @@ services:
 
   frontend:
     image: ghcr.io/kalanimus/film-react-nest-frontend:latest
-    environment:
-      VITE_API_URL: http://api.kalanimus.film.nomorepartiessbs.ru/afisha
-      VITE_CDN_URL: http://api.kalanimus.film.nomorepartiessbs.ru/content/afisha
-
     volumes:
       - frontend_dist:/usr/share/nginx/html
 
